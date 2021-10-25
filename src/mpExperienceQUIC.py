@@ -83,9 +83,10 @@ class MpExperienceQUIC(MpExperience):
 		self.mpTopo.commandTo(self.mpConfig.server, cmd)
 
 	def clean(self):
-		MpExperience.clean(self)
-		if self.file  == "random":
-			self.mpTopo.commandTo(self.mpConfig.client, "rm random*")
+		pass
+		# MpExperience.clean(self)
+		# if self.file  == "random":
+		# 	self.mpTopo.commandTo(self.mpConfig.client, "rm random*")
 
 	def create_script(self):
 		self.mpTopo.commandTo(
@@ -93,20 +94,21 @@ class MpExperienceQUIC(MpExperience):
 			"echo '#!/bin/bash\nsleep 50\nsudo ifconfig Client-eth0 down' > if_down.sh")
 
 	def run(self):
-		# CREATE SCRIPT TO SHUTDOWN INTERFACE AFTER 30 SEC
-		self.create_script()
 
 		self.compileGoFiles()
 		cmd = self.getQUICServerCmd()
 		self.mpTopo.commandTo(self.mpConfig.server, "netstat -sn > netstat_server_before")
 		self.mpTopo.commandTo(self.mpConfig.server, cmd)
 
-
 		self.mpTopo.commandTo(self.mpConfig.client, "sleep 2")
 
 		self.mpTopo.commandTo(self.mpConfig.client, "netstat -sn > netstat_client_before")
 		# IFSTAT
-		self.mpTopo.commandTo(self.mpConfig.client, "ifstat -ntTw &  >> client_ifstat.txt")
+		self.mpTopo.commandTo(self.mpConfig.client, "ifstat -ntTw >> client_ifstat.txt")
+		# CREATE SCRIPT TO SHUTDOWN INTERFACE AFTER 30 SEC
+		self.create_script()
+		self.mpTopo.commandTo(self.mpConfig.server, "ifconfig > infos.txt")
+
 
 		cmd = self.getQUICClientPreCmd()
 		self.mpTopo.commandTo(self.mpConfig.client, cmd)
