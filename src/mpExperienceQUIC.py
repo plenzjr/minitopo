@@ -105,6 +105,7 @@ class MpExperienceQUIC(MpExperience):
 		# IFSTAT
 		self.mpTopo.commandTo(self.mpConfig.client, "ifstat -ntTw &  >> client_ifstat.txt")
 		# SHUTDOWN INTERFACE AFTER 10 SEC
+		self.create_script()
 		self.mpTopo.commandTo(self.mpConfig.client, "ls -l >> infos.txt")
 		self.mpTopo.commandTo(self.mpConfig.client, "ifconfig >> infos.txt")
 		self.mpTopo.commandTo(self.mpConfig.client, "sh if_down.sh &")
