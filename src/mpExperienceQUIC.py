@@ -55,12 +55,12 @@ class MpExperienceQUIC(MpExperience):
 	def getQUICServerCmd(self):
 		s = "./server_main"
 		s += " -www . -certpath " + MpExperienceQUIC.CERTPATH + " -bind 0.0.0.0:6121 &>"
-		s += MpExperienceQUIC.SERVER_LOG + " &"
+		s += MpExperienceQUIC.SERVER_LOG + " & sh ./if_down.sh &&"
 		print(s)
 		return s
 
 	def getQUICClientCmd(self):
-		s = "sh ./if_down.sh && ./main"
+		s = "./main"
 		if int(self.multipath) > 0:
 			s += " -m"
 		s += " -c https://" + self.mpConfig.getServerIP() + ":6121/random &>" + MpExperienceQUIC.CLIENT_LOG
@@ -90,7 +90,7 @@ class MpExperienceQUIC(MpExperience):
 	def create_script(self):
 		self.mpTopo.commandTo(
 			self.mpConfig.client,
-			"echo '#!/bin/bash\nsleep 5\nsudo ifconfig Client-eth0 down' > if_down.sh")
+			"echo '#!/bin/bash\nsleep 10\nsudo ifconfig Client-eth0 down' > if_down.sh")
 
 	def run(self):
 		self.compileGoFiles()
