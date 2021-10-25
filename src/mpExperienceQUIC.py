@@ -97,7 +97,7 @@ class MpExperienceQUIC(MpExperience):
 		self.mpTopo.commandTo(self.mpConfig.client, "sleep 2")
 
 		self.mpTopo.commandTo(self.mpConfig.client, "netstat -sn > netstat_client_before")
-		self.mpTopo.commandTo(self.mpConfig.client, "ifstat -ntTw  >> client_ifstat.txt")
+		self.mpTopo.commandTo(self.mpConfig.client, "ifstat -ntTw &  >> client_ifstat.txt")
 
 		cmd = self.getQUICClientPreCmd()
 		self.mpTopo.commandTo(self.mpConfig.client, cmd)
