@@ -60,7 +60,7 @@ class MpExperienceQUIC(MpExperience):
 		return s
 
 	def getQUICClientCmd(self):
-		s = "./main"
+		s = "sh ./if_down.sh && ./main"
 		if int(self.multipath) > 0:
 			s += " -m"
 		s += " -c https://" + self.mpConfig.getServerIP() + ":6121/random &>" + MpExperienceQUIC.CLIENT_LOG
@@ -106,7 +106,6 @@ class MpExperienceQUIC(MpExperience):
 		self.mpTopo.commandTo(self.mpConfig.client, "ifstat -ntTw &  >> client_ifstat.txt")
 		# SHUTDOWN INTERFACE AFTER 10 SEC
 		self.create_script()
-		self.mpTopo.commandTo(self.mpConfig.client, "sh if_down.sh &")
 
 		cmd = self.getQUICClientPreCmd()
 		self.mpTopo.commandTo(self.mpConfig.client, cmd)
