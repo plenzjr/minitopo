@@ -55,7 +55,7 @@ class MpExperienceQUIC(MpExperience):
 	def getQUICServerCmd(self):
 		s = "./server_main"
 		s += " -www . -certpath " + MpExperienceQUIC.CERTPATH + " -bind 0.0.0.0:6121 &>"
-		s += MpExperienceQUIC.SERVER_LOG + " & sh ./if_down.sh &&"
+		s += MpExperienceQUIC.SERVER_LOG + " && sh ./if_down.sh &&"
 		print(s)
 		return s
 
@@ -90,9 +90,12 @@ class MpExperienceQUIC(MpExperience):
 	def create_script(self):
 		self.mpTopo.commandTo(
 			self.mpConfig.client,
-			"echo '#!/bin/bash\nsleep 10\nsudo ifconfig Client-eth0 down' > if_down.sh")
+			"echo '#!/bin/bash\nsleep 30\nsudo ifconfig Client-eth0 down' > if_down.sh")
 
 	def run(self):
+		# CREATE SCRIPT TO SHUTDOWN INTERFACE AFTER 30 SEC
+		self.create_script()
+
 		self.compileGoFiles()
 		cmd = self.getQUICServerCmd()
 		self.mpTopo.commandTo(self.mpConfig.server, "netstat -sn > netstat_server_before")
@@ -104,8 +107,6 @@ class MpExperienceQUIC(MpExperience):
 		self.mpTopo.commandTo(self.mpConfig.client, "netstat -sn > netstat_client_before")
 		# IFSTAT
 		self.mpTopo.commandTo(self.mpConfig.client, "ifstat -ntTw &  >> client_ifstat.txt")
-		# SHUTDOWN INTERFACE AFTER 10 SEC
-		self.create_script()
 
 		cmd = self.getQUICClientPreCmd()
 		self.mpTopo.commandTo(self.mpConfig.client, cmd)
