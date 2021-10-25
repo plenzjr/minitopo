@@ -47,15 +47,15 @@ class MpExperienceQUIC(MpExperience):
 				MpExperienceQUIC.CLIENT_LOG )
 		self.mpTopo.commandTo(self.mpConfig.server, "rm " + \
 				MpExperienceQUIC.SERVER_LOG )
-		if self.file  == "random":
-			self.mpTopo.commandTo(self.mpConfig.client,
-				"dd if=/dev/urandom of=random bs=1K count=" + \
-				self.random_size)
+		# if self.file  == "random":
+		# 	self.mpTopo.commandTo(self.mpConfig.client,
+		# 		"dd if=/dev/urandom of=random bs=1K count=" + \
+		# 		self.random_size)
 
 	def getQUICServerCmd(self):
 		s = "./server_main"
 		s += " -www . -certpath " + MpExperienceQUIC.CERTPATH + " -bind 0.0.0.0:6121 &>"
-		s += MpExperienceQUIC.SERVER_LOG + " &"
+		s += MpExperienceQUIC.SERVER_LOG + " & "
 		print(s)
 		return s
 
@@ -83,11 +83,18 @@ class MpExperienceQUIC(MpExperience):
 		self.mpTopo.commandTo(self.mpConfig.server, cmd)
 
 	def clean(self):
-		MpExperience.clean(self)
-		if self.file  == "random":
-			self.mpTopo.commandTo(self.mpConfig.client, "rm random*")
+		pass
+		# MpExperience.clean(self)
+		# if self.file  == "random":
+		# 	self.mpTopo.commandTo(self.mpConfig.client, "rm random*")
+
+	def create_script(self):
+		self.mpTopo.commandTo(
+			self.mpConfig.client,
+			"echo '#!/bin/bash\nsleep 50\nsudo ifconfig Client-eth0 down' > if_down.sh")
 
 	def run(self):
+
 		self.compileGoFiles()
 		cmd = self.getQUICServerCmd()
 		self.mpTopo.commandTo(self.mpConfig.server, "netstat -sn > netstat_server_before")
@@ -96,11 +103,10 @@ class MpExperienceQUIC(MpExperience):
 		self.mpTopo.commandTo(self.mpConfig.client, "sleep 2")
 
 		self.mpTopo.commandTo(self.mpConfig.client, "netstat -sn > netstat_client_before")
-
 		# IFSTAT
-		self.mpTopo.commandTo(self.mpConfig.client,
-		                      "ifstat -ntTw >> client_ifstat.txt")
+		self.mpTopo.commandTo(self.mpConfig.client, "ifstat -ntTw >> client_ifstat.txt")
 		# CREATE SCRIPT TO SHUTDOWN INTERFACE AFTER 30 SEC
+		self.create_script()
 		self.mpTopo.commandTo(self.mpConfig.server, "ifconfig > info_server.txt")
 		self.mpTopo.commandTo(self.mpConfig.client, "ifconfig > info_client.txt")
 
@@ -113,9 +119,12 @@ class MpExperienceQUIC(MpExperience):
 		self.mpTopo.commandTo(self.mpConfig.server, "netstat -sn > netstat_server_after")
 		self.mpTopo.commandTo(self.mpConfig.client, "netstat -sn > netstat_client_after")
 
+
 		self.mpTopo.commandTo(self.mpConfig.server, "pkill -f " + MpExperienceQUIC.SERVER_GO_FILE)
 
 		self.mpTopo.commandTo(self.mpConfig.client, "sleep 2")
+		self.mpTopo.commandTo(self.mpConfig.client, "killall ifstat")
+
 		# Need to delete the go-build directory in tmp; could lead to no more space left error
 		self.mpTopo.commandTo(self.mpConfig.client, "rm -r /tmp/go-build*")
 		# Remove cache data
