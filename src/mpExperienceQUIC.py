@@ -93,7 +93,7 @@ class MpExperienceQUIC(MpExperience):
 		self.mpTopo.commandTo(self.mpConfig.server, "netstat -sn > netstat_server_before")
 		self.mpTopo.commandTo(self.mpConfig.server, cmd)
 
-		# self.mpTopo.commandTo(self.mpConfig.client, "ifstat -ntTw  >> client_ifstat.txt")
+		self.mpTopo.commandTo(self.mpConfig.client, "ifstat -ntTw  >> client_ifstat.txt")
 
 		self.mpTopo.commandTo(self.mpConfig.client, "sleep 2")
 
@@ -111,6 +111,8 @@ class MpExperienceQUIC(MpExperience):
 		self.mpTopo.commandTo(self.mpConfig.server, "pkill -f " + MpExperienceQUIC.SERVER_GO_FILE)
 
 		self.mpTopo.commandTo(self.mpConfig.client, "sleep 2")
+		self.mpTopo.commandTo(self.mpConfig.client, "killall ifstat")
+
 		# Need to delete the go-build directory in tmp; could lead to no more space left error
 		self.mpTopo.commandTo(self.mpConfig.client, "rm -r /tmp/go-build*")
 		# Remove cache data
