@@ -55,7 +55,7 @@ class MpExperienceQUIC(MpExperience):
 	def getQUICServerCmd(self):
 		s = "./server_main"
 		s += " -www . -certpath " + MpExperienceQUIC.CERTPATH + " -bind 0.0.0.0:6121 &>"
-		s += MpExperienceQUIC.SERVER_LOG + " && sh ./if_down.sh &&"
+		s += MpExperienceQUIC.SERVER_LOG + " & "
 		print(s)
 		return s
 
