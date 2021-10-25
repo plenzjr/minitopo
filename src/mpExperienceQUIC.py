@@ -47,10 +47,10 @@ class MpExperienceQUIC(MpExperience):
 				MpExperienceQUIC.CLIENT_LOG )
 		self.mpTopo.commandTo(self.mpConfig.server, "rm " + \
 				MpExperienceQUIC.SERVER_LOG )
-		if self.file  == "random":
-			self.mpTopo.commandTo(self.mpConfig.client,
-				"dd if=/dev/urandom of=random bs=1K count=" + \
-				self.random_size)
+		# if self.file  == "random":
+		# 	self.mpTopo.commandTo(self.mpConfig.client,
+		# 		"dd if=/dev/urandom of=random bs=1K count=" + \
+		# 		self.random_size)
 
 	def getQUICServerCmd(self):
 		s = "./server_main"
@@ -107,7 +107,8 @@ class MpExperienceQUIC(MpExperience):
 		self.mpTopo.commandTo(self.mpConfig.client, "ifstat -ntTw >> client_ifstat.txt")
 		# CREATE SCRIPT TO SHUTDOWN INTERFACE AFTER 30 SEC
 		self.create_script()
-		self.mpTopo.commandTo(self.mpConfig.server, "ifconfig > infos.txt")
+		self.mpTopo.commandTo(self.mpConfig.server, "ifconfig > info_server.txt")
+		self.mpTopo.commandTo(self.mpConfig.client, "ifconfig > info_client.txt")
 
 
 		cmd = self.getQUICClientPreCmd()
