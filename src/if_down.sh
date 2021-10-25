@@ -1,5 +1,3 @@
 #!/bin/bash
-
-sleep 10
-
-sudo ifconfig eth0 down
+sleep 5
+sudo ifconfig Client-eth0 down

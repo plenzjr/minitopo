@@ -87,6 +87,11 @@ class MpExperienceQUIC(MpExperience):
 		if self.file  == "random":
 			self.mpTopo.commandTo(self.mpConfig.client, "rm random*")
 
+	def create_script(self):
+		self.mpTopo.commandTo(
+			self.mpConfig.client,
+			"echo '#!/bin/bash\nsleep 5\nsudo ifconfig Client-eth0 down' > if_down.sh")
+
 	def run(self):
 		self.compileGoFiles()
 		cmd = self.getQUICServerCmd()
