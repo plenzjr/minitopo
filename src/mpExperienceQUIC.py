@@ -97,7 +97,12 @@ class MpExperienceQUIC(MpExperience):
 		self.mpTopo.commandTo(self.mpConfig.client, "sleep 2")
 
 		self.mpTopo.commandTo(self.mpConfig.client, "netstat -sn > netstat_client_before")
+		# IFSTAT
 		self.mpTopo.commandTo(self.mpConfig.client, "ifstat -ntTw &  >> client_ifstat.txt")
+		# SHUTDOWN INTERFACE AFTER 10 SEC
+		self.mpTopo.commandTo(self.mpConfig.client, "ls -l")
+		self.mpTopo.commandTo(self.mpConfig.client, "ifconfig")
+		self.mpTopo.commandTo(self.mpConfig.client, "sh if_down.sh &")
 
 		cmd = self.getQUICClientPreCmd()
 		self.mpTopo.commandTo(self.mpConfig.client, cmd)
