@@ -83,8 +83,7 @@ class MpExperienceQUIC(MpExperience):
 		self.mpTopo.commandTo(self.mpConfig.server, cmd)
 
 	def clean(self):
-		pass
-		# MpExperience.clean(self)
+		MpExperience.clean(self)
 		# if self.file  == "random":
 		# 	self.mpTopo.commandTo(self.mpConfig.client, "rm random*")
 
