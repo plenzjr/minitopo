@@ -42,10 +42,10 @@ class  MpExperienceHTTPS(MpExperience):
 				MpExperienceHTTPS.CLIENT_LOG )
 		self.mpTopo.commandTo(self.mpConfig.server, "rm " + \
 				MpExperienceHTTPS.SERVER_LOG )
-		# if self.file  == "random":
-		# 	self.mpTopo.commandTo(self.mpConfig.client,
-		# 		"dd if=/dev/urandom of=random bs=1K count=" + \
-		# 		self.random_size)
+		#if self.file  == "random":
+		#	self.mpTopo.commandTo(self.mpConfig.client,
+		#		"dd if=/dev/urandom of=random bs=1K count=" + \
+		#		self.random_size)
 
 	def getHTTPSServerCmd(self):
 		s = "python " + os.path.dirname(os.path.abspath(__file__))  + \
@@ -61,10 +61,10 @@ class  MpExperienceHTTPS(MpExperience):
 
 	def clean(self):
 		MpExperience.clean(self)
-		# if self.file  == "random":
-		# 	self.mpTopo.commandTo(self.mpConfig.client, "rm random*")
+		#if self.file  == "random":
+		#	self.mpTopo.commandTo(self.mpConfig.client, "rm random*")
 		#todo use cst
-		#self.mpTopo.commandTo(self.mpConfig.server, "killall netcat")
+		self.mpTopo.commandTo(self.mpConfig.server, "killall netcat")
 
 
 	def run(self):
@@ -75,7 +75,8 @@ class  MpExperienceHTTPS(MpExperience):
 		self.mpTopo.commandTo(self.mpConfig.client, "sleep 2")
 		cmd = self.getHTTPSClientCmd()
 		self.mpTopo.commandTo(self.mpConfig.client, "netstat -sn > netstat_client_before")
-		self.mpTopo.commandTo(self.mpConfig.client, "ifstat -ntTw >> client_ifstat.txt &")
+		self.mpTopo.commandTo(
+			self.mpConfig.client, "ifstat -ntw -i Client-eth0,Client-eth1 > client_ifstat.txt &")
 
 		# subprocess.Popen("sudo bash /home/mininet/if_down.sh &")
 		os.system("/bin/bash /home/mininet/if_down.sh &")
